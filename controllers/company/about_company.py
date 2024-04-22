@@ -12,7 +12,6 @@ about_company_routes = Blueprint('about_company_routes', __name__)
 
 @login_required
 @about_company_routes.route("/about_company", methods=['GET'])
-
 def about_company():
     print(current_user)
     if isinstance(current_user, Company):

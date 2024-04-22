@@ -1,10 +1,10 @@
 from flask import Flask
 import os
 from dotenv import load_dotenv
-from controllers.user import user_routes
-from controllers.company import company_routes
-from controllers.about_company import about_company_routes
-from controllers.about_user import about_user_routes
+from controllers.user.user import user_routes
+from controllers.company.company import company_routes
+from controllers.company.about_company import about_company_routes
+from controllers.user.about_user import about_user_routes
 from flask_login import LoginManager
 from connectors.mysql_connector import  engine
 from sqlalchemy.orm import sessionmaker

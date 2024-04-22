@@ -118,10 +118,10 @@ def company_do_login():
         )
     finally:
         if session:
-            session.close()  # Tutup session setelah selesai digunakan
+            session.close()  
  
 
-@company_routes.route("/logout_company", methods=['POST'])
+@company_routes.route("/logout_company", methods=['GET'])
 def company_do_logout():
     logout_user()
     return("logout")

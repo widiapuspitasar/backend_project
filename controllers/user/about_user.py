@@ -12,7 +12,6 @@ about_user_routes = Blueprint('about_user_routes', __name__)
 
 @login_required
 @about_user_routes.route("/about_user", methods=["GET"])
-
 def about_user():
     print(current_user)
     if isinstance(current_user, User):
@@ -47,9 +46,8 @@ def about_user():
             data={}
         )
     
-
-@about_user_routes.route("/about_user/create", methods=["POST"])
 @login_required
+@about_user_routes.route("/about_user/create", methods=["POST"])
 def create_about_user():
     print(current_user)
     session = None
@@ -98,14 +96,14 @@ def create_about_user():
     except SQLAlchemyError as e:
         if session:
             session.rollback()
-        print("SQLAlchemy Error:", e)  # Tambahkan pencatatan kesalahan di sini
+        print("SQLAlchemy Error:", e) 
         return api_response(
             status_code=500,
             message="Database error: " + str(e),
             data={}
         )
     except Exception as e:
-        print("Server Error:", e)  # Tambahkan pencatatan kesalahan di sini
+        print("Server Error:", e)  
         return api_response(
             status_code=500,
             message="Server error: " + str(e),

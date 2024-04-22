@@ -61,6 +61,7 @@ def do_registration():
 
 @user_routes.route("/login", methods=['POST'])
 def do_user_login():
+    print(current_user)
     session = None  
     try:
         data = request.json
@@ -94,15 +95,23 @@ def do_user_login():
                 data={}
             )
 
-        login_user(user, remember=False)
-        print(session)
+        login_user(user, remember=True)
+        
+        # Pastikan untuk menyimpan perubahan sesi setelah login berhasil
+        session.commit()
+
+        # Pastikan bahwa current_user diperbarui setelah login berhasil
+        print(current_user)
+        login_user(user)
+
         return api_response(
             status_code=200,
             message="Login Successfully",
             data={"user": user.serialize(full=False)}
         )
     except SQLAlchemyError as e:
-        session.rollback()
+        if session:
+            session.rollback()  
         return api_response(
             status_code=500,
             message="Database error: " + str(e),
@@ -117,6 +126,7 @@ def do_user_login():
     finally:
         if session:
             session.close() 
+ 
 
 @user_routes.route("/logout", methods=['GET'])
 def do_user_logout():
