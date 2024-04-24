@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, ForeignKey
+from sqlalchemy import Integer, String, DateTime
 from models.base import Base
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
@@ -17,6 +17,7 @@ class Company(Base, UserMixin):
     created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
 
     about_company = relationship("About_company", back_populates="company")
+    post_job = relationship("Post_job", back_populates="company")
     
 
     def serialize(self, full=True):

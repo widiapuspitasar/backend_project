@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, ForeignKey
+from sqlalchemy import Integer, String, DateTime
 from models.base import Base
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
@@ -16,6 +16,7 @@ class User(Base, UserMixin):
     created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
     
     about_user = relationship("About_user", back_populates="user")
+    apply_job = relationship("Apply_job", back_populates="user")
 
     def serialize(self, full=True):
         if full:

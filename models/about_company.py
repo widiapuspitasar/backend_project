@@ -19,7 +19,8 @@ class About_company(Base,UserMixin):
     updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     company = relationship("Company", back_populates="about_company")
-
+    post_job = relationship("Post_job", back_populates="about_company")
+    
     def serialize(self, full=True):
         if full:
             return{

@@ -140,42 +140,43 @@ def get_about_company_list():
 @login_required
 @about_company_routes.route("/about_company/<int:about_company_id>", methods=['PUT'])
 def update_about_company(about_company_id):
-    connection = engine.connect()
-    Session = sessionmaker(connection)
-    session = Session()
-    session.begin()
+    if isinstance(current_user, Company):
+        connection = engine.connect()
+        Session = sessionmaker(connection)
+        session = Session()
+        session.begin()
 
-    try: 
-        update_about_company = session.query(About_company).filter(About_company.id == about_company_id).first()
+        try: 
+            update_about_company = session.query(About_company).filter(About_company.id == about_company_id).first()
 
-        update_about_company.company_type = request.json.get('company_type', update_about_company.company_type)
-        update_about_company.address = request.json.get('address', update_about_company.address)
-        update_about_company.phonenumber = request.json.get('phonenumber', update_about_company.phonenumber)
-        update_about_company.about_us = request.json.get('about_us', update_about_company.about_us)
-        update_about_company.email = request.json.get('email', update_about_company.email)
-        update_about_company.updated_at = func.now()
+            update_about_company.company_type = request.json.get('company_type', update_about_company.company_type)
+            update_about_company.address = request.json.get('address', update_about_company.address)
+            update_about_company.phonenumber = request.json.get('phonenumber', update_about_company.phonenumber)
+            update_about_company.about_us = request.json.get('about_us', update_about_company.about_us)
+            update_about_company.email = request.json.get('email', update_about_company.email)
+            update_about_company.updated_at = func.now()
 
-        session.commit()
-            
-        return api_response(
-            status_code=201,
-            message="About Company data updated successfully",
-            data={
-                    "company_type": update_about_company.company_type,
-                    "address": update_about_company.address,
-                    "phonenumber": update_about_company.phonenumber,
-                    "about_us": update_about_company.about_us,
-                    "email": update_about_company.email,
-                    "updated_at": update_about_company.updated_at
-                }
-            )    
-    except Exception as e:
-        session.rollback()
-        return api_response(
-            status_code=500,
-            message=str(e),
-            data={}
-        )
-    
-    finally:
-        session.close()
+            session.commit()
+                
+            return api_response(
+                status_code=201,
+                message="About Company data updated successfully",
+                data={
+                        "company_type": update_about_company.company_type,
+                        "address": update_about_company.address,
+                        "phonenumber": update_about_company.phonenumber,
+                        "about_us": update_about_company.about_us,
+                        "email": update_about_company.email,
+                        "updated_at": update_about_company.updated_at
+                    }
+                )    
+        except Exception as e:
+            session.rollback()
+            return api_response(
+                status_code=500,
+                message=str(e),
+                data={}
+            )
+        
+        finally:
+            session.close()

@@ -1,6 +1,7 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, jsonify, request, redirect, url_for
 from connectors.mysql_connector import engine
 from models.user import User
+from models.company import Company
 from models.about_user import About_user
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_user, login_required, logout_user, current_user
@@ -16,20 +17,20 @@ def about_user():
     print(current_user)
     if isinstance(current_user, User):
         user_data = {
-            "name": current_user.name,
-            "email": current_user.email, 
-        }
+                "name": current_user.name,
+                "email": current_user.email,
+            }
 
         about_user_data = []
         for about_user in current_user.about_user:
-            about_user_data.append({
-            "name": about_user.name,
-            "skill": about_user.skill,
-            "phonenumber": about_user.phonenumber,
-            "about_user": about_user.about_user,
-            "email": about_user.email,
-            "file_resume": about_user.file_resume,
-            })
+                about_user_data.append({
+                    "name": about_user.name,
+                    "skill": about_user.skill,
+                    "phonenumber": about_user.phonenumber,
+                    "about_user": about_user.about_user,
+                    "email": about_user.email,
+                    "file_resume": about_user.file_resume,
+                })
 
         return api_response(
             status_code=200,
@@ -40,13 +41,16 @@ def about_user():
             }
         )
     else:
-        return api_response(
-            status_code=403,
-            message="Forbidden: Only user are allowed to access this route",
-            data={}
-        )
+        return jsonify({
+            "status": {
+                "code": 403,
+                "message": "Forbidden: Only authenticated users are allowed to access this route"
+            },
+            "data": {}
+        }), 403
+
     
-@login_required
+
 @about_user_routes.route("/about_user/create", methods=["POST"])
 def create_about_user():
     print(current_user)
@@ -113,4 +117,47 @@ def create_about_user():
         if session:
             session.close()
 
-        
+@login_required       
+@about_user_routes.route("/about_user/<int:about_user_id>", methods=["PUT"])
+def update_about_user(about_user_id):
+    connection = engine.connect()
+    Session = sessionmaker(connection)
+    session = Session()
+    session.begin()
+
+    try:
+        update_about_user = session.query(About_user).filter(About_user.id == about_user_id).first()
+
+        update_about_user.name = request.json.get('name', update_about_user.name)
+        update_about_user.skill = request.json.get('skill', update_about_user.skill)
+        update_about_user.phonenumber = request.json.get('phonenumber', update_about_user.phonenumber)
+        update_about_user.about_user = request.json.get('about_user', update_about_user.about_user)
+        update_about_user.email = request.json.get('email', update_about_user.email)
+        update_about_user.file_resume = request.json.get('file_resume', update_about_user.file_resume)
+        update_about_user.updated_at = func.now()
+
+        session.commit()
+
+        return api_response(
+            status_code=201,
+            message="About Company data updated successfully",
+            data={
+                    "name": update_about_user.name,
+                    "skill": update_about_user.skill,
+                    "phonenumber": update_about_user.phonenumber,
+                    "about_user": update_about_user.about_user,
+                    "email": update_about_user.email,
+                    "file_resume": update_about_user.file_resume,
+                    "updated_at": update_about_user.updated_at
+                }
+            )    
+    except Exception as e:
+        session.rollback()
+        return api_response(
+            status_code=500,
+            message=str(e),
+            data={}
+        )
+    
+    finally:
+        session.close()

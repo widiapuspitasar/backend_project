@@ -48,3 +48,20 @@ CREATE TABLE about_user (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
+
+CREATE TABLE post_job (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    about_company_id INT,
+    FOREIGN KEY (about_company_id) REFERENCES about_company(id),
+    job_name VARCHAR(255),
+    job_description VARCHAR(255),
+    post_until DATE,
+    qualification JSON,
+    benefit JSON,
+    address_job VARCHAR(255),
+	job_level ENUM('Entry-level', 'Intermediate', 'First-level management', 'Senior management') DEFAULT 'Entry-level',
+    job_category VARCHAR(255),
+    vacancy VARCHAR(255),
+    educational_requirement VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

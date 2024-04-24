@@ -119,6 +119,7 @@ def company_do_login():
     finally:
         if session:
             session.close()  
+
  
 
 @company_routes.route("/logout_company", methods=['GET'])
