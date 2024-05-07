@@ -34,13 +34,13 @@ ENV PYTHONUNBUFFERED 1
 ENV VIRTUALENVS_IN_PROJECT=1 \
     VIRTUALENVS_CREATE=1 
 
-ENV FLASK_APP main.py
+ENV FLASK_APP index.py
 ENV FLASK_DEBUG true
 ENV FLASK_ENV development
 
 COPY requirements.txt .
 
 
-CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "index.py", "--bind", "0.0.0.0:5000"]
 
 
