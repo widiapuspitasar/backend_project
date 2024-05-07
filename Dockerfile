@@ -41,6 +41,6 @@ ENV FLASK_ENV development
 COPY requirements.txt .
 
 
-CMD ["gunicorn", "index.py", "--bind", "0.0.0.0:5000"]
+CMD ["gunicorn", "index:app", "--bind", "0.0.0.0:5000"]
 
 
