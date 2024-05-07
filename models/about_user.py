@@ -1,4 +1,5 @@
-from sqlalchemy import Integer, String, DateTime, ForeignKey, JSON
+from typing import Text
+from sqlalchemy import Integer, String, DateTime, ForeignKey, JSON, TEXT
 from models.base import Base
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
@@ -11,9 +12,10 @@ class About_user(Base, UserMixin):
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     user_id = mapped_column(Integer, ForeignKey('user.id', ondelete="CASCADE"))
     name = mapped_column(String(255), nullable=False, unique=True)
-    skill = mapped_column(JSON, nullable=False)
+    skills = mapped_column(JSON, nullable=False)
     phonenumber = mapped_column(String(255), nullable=False)
-    about_user = mapped_column(String(255), nullable=False)
+    about_user = mapped_column(TEXT, nullable=False)
+    role = mapped_column(String(255), nullable=False)
     email = mapped_column(String(255), nullable=False, unique=True)
     file_resume = mapped_column(String(255), nullable=False)
     created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
@@ -26,8 +28,9 @@ class About_user(Base, UserMixin):
             return{
                 'id': self.id,
                 'user_id':self.user_id,
+                'role': self.role,
                 'name':self.name,
-                'skill':self.skill,
+                'skills':self.skill,
                 'phonenumber':self.phonenumber,
                 'about_user':self.about_user,
                 'email':self.email,
@@ -38,9 +41,10 @@ class About_user(Base, UserMixin):
         else:
             return{
                 'id': self.id,
+                'role': self.role,
                 'user_id':self.user_id,
                 'name':self.name,
-                'skill':self.skill,
+                'skills':self.skill,
                 'phonenumber':self.phonenumber,
                 'about_user':self.about_user,
                 'email':self.email,

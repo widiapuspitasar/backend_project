@@ -18,6 +18,7 @@ class Company(Base, UserMixin):
 
     about_company = relationship("About_company", back_populates="company")
     post_job = relationship("Post_job", back_populates="company")
+    apply_job = relationship("Apply_job", back_populates="company")
     
 
     def serialize(self, full=True):

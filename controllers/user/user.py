@@ -1,10 +1,9 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, jsonify, request
 from connectors.mysql_connector import engine
 from models.user import User
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_user, login_required, logout_user, current_user
 from utils.api_reponse import api_response
-from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
 user_routes = Blueprint('user_routes',__name__)
@@ -87,6 +86,7 @@ def do_registration():
 
 @user_routes.route("/login_user", methods=['POST'])
 def do_user_login():
+    print(current_user)
     session = None
     try:
         data = request.json
@@ -137,7 +137,26 @@ def do_user_login():
             data={}
         )
     finally:
+        if session:
             session.close()
+
+@user_routes.route("/get_current_user", methods=['GET'])
+@login_required
+def get_current_user():
+    print(current_user)
+    if current_user.is_authenticated:
+        return api_response(
+            status_code=200,
+            message="User data retrieved successfully",
+            data={"user": current_user.serialize(full=False)}
+        )
+    else:
+        return api_response(
+            status_code=401,
+            message="User not authenticated",
+            data={}
+        )
+
 
 
 @user_routes.route("/logout", methods=['GET'])

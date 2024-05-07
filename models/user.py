@@ -17,6 +17,7 @@ class User(Base, UserMixin):
     
     about_user = relationship("About_user", back_populates="user")
     apply_job = relationship("Apply_job", back_populates="user")
+    favorite_job = relationship("Favorite_job", back_populates="user")
 
     def serialize(self, full=True):
         if full:

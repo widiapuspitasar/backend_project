@@ -1,21 +1,12 @@
-from flask import Blueprint, jsonify, request, redirect
+from flask import Blueprint, request
 from connectors.mysql_connector import engine
 from models.company import Company
 from sqlalchemy.orm import sessionmaker
-from flask_login import login_user, login_required, logout_user, current_user
+from flask_login import login_user, logout_user
 from utils.api_reponse import api_response
-from sqlalchemy import func
 from sqlalchemy.exc import SQLAlchemyError
 
 company_routes = Blueprint('company_routes', __name__)
-
-@company_routes.route("/signup", methods=['GET'])
-def company_register():
-    return('signup company')
-
-@company_routes.route("/signin", methods=['GEt'])
-def company_signin():
-    return('signin company')
 
 @company_routes.route("/signup", methods=['POST'])
 def company_do_register():
@@ -125,7 +116,7 @@ def company_do_login():
 @company_routes.route("/logout_company", methods=['GET'])
 def company_do_logout():
     logout_user()
-    return("logout")
+    return("logout user succes")
 
 
     

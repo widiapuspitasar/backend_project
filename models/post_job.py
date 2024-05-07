@@ -1,4 +1,4 @@
-from sqlalchemy import Integer, String, DateTime, ForeignKey, JSON, Enum
+from sqlalchemy import TEXT, Integer, String, DateTime, ForeignKey, JSON, Enum, Date
 from models.base import Base
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
@@ -12,22 +12,22 @@ class Post_job(Base, UserMixin):
     about_company_id = mapped_column(Integer, ForeignKey('about_company.id', ondelete="CASCADE"))
     company_id   = mapped_column(Integer, ForeignKey('company.id', ondelete="CASCADE"))
     job_name = mapped_column(String(255), nullable=False)
-    job_description = mapped_column(String(255), nullable=False)
-    post_until = mapped_column(String(255), nullable=False)
+    job_description = mapped_column(TEXT, nullable=False)
+    post_until = mapped_column(Date, nullable=False)
     qualification = mapped_column(JSON, nullable=False)
     benefit = mapped_column(JSON, nullable=False)
     address_job = mapped_column(String(255), nullable=False)
     job_level = mapped_column(Enum('Entry-level', 'Intermediate', 'First-level management', 'Senior management'), default='Entry-level')
     job_category = mapped_column(String(255), nullable=False)
     vacancy = mapped_column(String(255), nullable=False)
-    educational_requirenment = mapped_column(String(255), nullable=False)
+    educational_requirenment = mapped_column(TEXT, nullable=False)
     created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at = mapped_column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
 
     about_company = relationship("About_company", back_populates="post_job")
     company= relationship("Company", back_populates="post_job")
     apply_job = relationship("Apply_job", back_populates="post_job")
-
+    favorite_job = relationship("Favorite_job", back_populates="post_job")
 
     def serialize(self, full=True):
         if full:

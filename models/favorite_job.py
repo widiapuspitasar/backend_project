@@ -1,24 +1,20 @@
-from sqlalchemy import Integer, DateTime, ForeignKey, Enum
+from sqlalchemy import Integer, DateTime, ForeignKey
 from models.base import Base
 from sqlalchemy.orm import mapped_column
 from sqlalchemy.sql import func
 from flask_login import UserMixin
 from sqlalchemy.orm import relationship
 
-class Apply_job(Base, UserMixin):
-    __tablename__= 'apply_job'
+class Favorite_job(Base, UserMixin):
+    __tablename__ = 'favorite_job'
 
     id = mapped_column(Integer, primary_key=True, autoincrement=True)
     post_job_id = mapped_column(Integer, ForeignKey('post_job.id', ondelete="CASCADE"))
     user_id   = mapped_column(Integer, ForeignKey('user.id', ondelete="CASCADE"))
-    company_id   = mapped_column(Integer, ForeignKey('company.id', ondelete="CASCADE"))
-    status = mapped_column(Enum('Submitted', 'In process', 'Accepted', 'Rejected'), default='Submitted')
-    date = mapped_column(DateTime(timezone=True), server_default=func.now())
+    created_at = mapped_column(DateTime(timezone=True), server_default=func.now())
 
-    post_job = relationship("Post_job", back_populates="apply_job")
-    user = relationship("User", back_populates="apply_job")
-    company = relationship("Company", back_populates="apply_job")
-    
+    post_job = relationship("Post_job", back_populates="favorite_job")
+    user = relationship("User", back_populates="favorite_job")
 
     def serialize(self, full=True):
         if full:
@@ -26,15 +22,13 @@ class Apply_job(Base, UserMixin):
                 'id': self.id,
                 'post_job_id':self.post_job_id,
                 'user_id':self.user_id,
-                'company_id':self.company_id,
-                'status':self.status,
-                'date':self.date,
+                'created_at':self.created_at,
             }
         else:
              return{
                 'id': self.id,
                 'post_job_id':self.post_job_id,
-                'status':self.status,
+                'user_id':self.user_id,
              }
     
     def __repr__(self):

@@ -1,21 +1,24 @@
 from flask import Flask
 import os
-from dotenv import load_dotenv
 from controllers.user.user import user_routes
 from controllers.company.company import company_routes
 from controllers.company.about_company import about_company_routes
 from controllers.user.about_user import about_user_routes
 from controllers.job.post_job import post_job_routes
 from controllers.job.apply_job import apply_job_routes
+from controllers.job.favorite_job import favorite_job_routes
+from controllers.job.status_job import status_job_routes
 from flask_login import LoginManager
 from connectors.mysql_connector import  engine
 from sqlalchemy.orm import sessionmaker
 from models.user import User
 from models.company import Company
+from flask_cors import CORS
 
 app=Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
+CORS(app, origins='http://localhost:5173', supports_credentials=True)
 
 @app.route("/")
 def hello():
@@ -45,3 +48,5 @@ app.register_blueprint(user_routes)
 app.register_blueprint(about_user_routes)
 app.register_blueprint(post_job_routes)
 app.register_blueprint(apply_job_routes)
+app.register_blueprint(favorite_job_routes)
+app.register_blueprint(status_job_routes)

@@ -65,3 +65,11 @@ CREATE TABLE post_job (
     educational_requirement VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE favorite_job (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    FOREIGN KEY (user_id) REFERENCES user(id),
+	post_job_id INT,
+    FOREIGN KEY (post_job_id) REFERENCES post_job(id)
+);
