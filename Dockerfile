@@ -1,8 +1,13 @@
 # Use the official Python image as a base image
-FROM python:3.9-slim
+FROM python:3.11.8
+
+WORKDIR /app
 
 COPY . /app
-WORKDIR /app
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+EXPOSE 5000
 
 ARG DB_USERNAME
 ARG DB_PASSWORD
@@ -29,10 +34,13 @@ ENV PYTHONUNBUFFERED 1
 ENV VIRTUALENVS_IN_PROJECT=1 \
     VIRTUALENVS_CREATE=1 
 
+ENV FLASK_APP main.py
+ENV FLASK_DEBUG true
+ENV FLASK_ENV development
+
 COPY requirements.txt .
 
-RUN pip install -r requirements.txt
 
-CMD ["\.venv\lib\site-packages\gunicorn", "-w 4", "-b 0.0.0.0:5000", "app:app"]
+CMD ["gunicorn", "main:app", "--bind", "0.0.0.0:5000"]
 
 
