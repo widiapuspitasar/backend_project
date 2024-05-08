@@ -18,13 +18,13 @@ from flask_cors import CORS
 app=Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 
-# CORS(app, origins='http://localhost:5173', supports_credentials=True)
+CORS(app, origins='http://localhost:5173', supports_credentials=True)
 
-CORS(app)
+# CORS(app)
 
 @app.route("/")
 def hello():
-    return("hello")
+    return("hello uhuy")
 
 login_manager = LoginManager()
 login_manager.init_app(app)
