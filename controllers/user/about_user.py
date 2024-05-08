@@ -13,7 +13,6 @@ about_user_routes = Blueprint('about_user_routes', __name__)
 @login_required
 @about_user_routes.route("/about_user/<int:user_id>", methods=["GET"])
 def about_user(user_id):
-    print(current_user)
     session = None
     try:
         connection = engine.connect()

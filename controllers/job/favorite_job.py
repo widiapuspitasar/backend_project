@@ -61,7 +61,6 @@ def delete_favorite(user_id, post_job_id):
 @login_required
 @favorite_job_routes.route("/favorite_list/<int:user_id>", methods=['GET'])
 def favorite_list(user_id):
-    print(current_user)
     session = None
     try:
         connection = engine.connect()

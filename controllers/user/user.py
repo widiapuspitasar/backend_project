@@ -86,7 +86,6 @@ def do_registration():
 
 @user_routes.route("/login_user", methods=['POST'])
 def do_user_login():
-    print(current_user)
     session = None
     try:
         data = request.json

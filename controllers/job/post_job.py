@@ -81,6 +81,7 @@ def create_post_job(company_id):
 @login_required
 @post_job_routes.route("/company/job", methods=['GET'])
 def get_job_list():
+    session = None
     try:
         connection = engine.connect()
         Session = sessionmaker(connection)
@@ -106,8 +107,6 @@ def get_job_list():
                     "vacancy": job.vacancy,
                     "educational_requirenment": job.educational_requirenment
                 })
-
-        
 
         return api_response(
             status_code=200,
@@ -181,6 +180,7 @@ def get_job_list_by_company_id(company_id):
 @login_required
 @post_job_routes.route("/company/job/<int:post_job_id>", methods=['GET'])
 def get_job(post_job_id):
+        session = None
         try:
             connection = engine.connect()
             Session = sessionmaker(connection)
@@ -251,7 +251,6 @@ def update_job(post_job_id):
             update_job.vacancy = request.json.get('vacancy', update_job.vacancy) 
             update_job.educational_requirenment = request.json.get('educational_requirenment', update_job.educational_requirenment)  
             update_job.updated_at = func.now()
-
 
             session.commit()
                 
