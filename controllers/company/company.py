@@ -1,55 +1,54 @@
-from flask import Blueprint, request
+from flask import Blueprint, jsonify, request
 from connectors.mysql_connector import engine
 from models.company import Company
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_user, logout_user
 from utils.api_reponse import api_response
 from sqlalchemy.exc import SQLAlchemyError
+from models.validation import RegistrationRequestCompany
 
 company_routes = Blueprint('company_routes', __name__)
 
 @company_routes.route("/signup", methods=['POST'])
 def company_do_register():
+    registration_data = request.json
+    registration_request = RegistrationRequestCompany(**registration_data)
     
-    company_name = request.json['company_name']
-    employer_name = request.json['employer_name']
-    company_email = request.json['company_email']
-    password = request.json['password']
+    if not registration_request.company_name or not registration_request.employer_name or not registration_request.company_email or not registration_request.password:
+        return jsonify({"message": "Incomplete data"}), 400
 
-    if not company_name or not  password or not employer_name or not company_email :
-        return api_response(
-            status_code=400,
-            message="Incomplete data",
-            data={}
-        )
-    
-    print(f"company_name: {company_name}, employer_name: {employer_name}, company_email: {company_email}, Password Hash: {password}")
-    NewCompany = Company(company_name=company_name,employer_name=employer_name, company_email=company_email )
-    NewCompany.set_password(password)
+    company_name = registration_request.company_name
+    employer_name = registration_request.employer_name
+    company_email = registration_request.company_email
+    password = registration_request.password
 
-    connection = engine.connect()
-    Session = sessionmaker(connection)
-    session = Session()
-
-    session.begin()
     try:
+        print(f"company_name: {company_name}, employer_name: {employer_name}, company_email: {company_email}, Password Hash: {password}")
+        NewCompany = Company(company_name=company_name,employer_name=employer_name, company_email=company_email )
+        NewCompany.set_password(password)
+
+        connection = engine.connect()
+        Session = sessionmaker(connection)
+        session = Session()
+
+        session.begin()
         session.add(NewCompany)
         session.commit()
+    
+        return api_response(
+                status_code=201,
+                message= "New user data has been successfully added",
+                data={
+                    "id": NewCompany.id,
+                    "company_name": NewCompany.company_name,
+                    "employer_name": NewCompany.employer_name,
+                    "company_email": NewCompany.company_email,
+                }
+            )
     except Exception as e:
         print(f"Error during registration: {e}")
         session.rollback()
         return { "message": "Failed to Register" }
-    
-    return api_response(
-            status_code=201,
-            message= "New user data has been successfully added",
-            data={
-                "id": NewCompany.id,
-                "company_name": NewCompany.company_name,
-                "employer_name": NewCompany.employer_name,
-                "company_email": NewCompany.company_email,
-            }
-        )
 
 @company_routes.route("/login_company", methods=['POST'])
 def company_do_login():

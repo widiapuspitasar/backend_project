@@ -1,12 +1,15 @@
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, jsonify, request, Flask
 from connectors.mysql_connector import engine
 from models.user import User
 from sqlalchemy.orm import sessionmaker
 from flask_login import login_user, login_required, logout_user, current_user
 from utils.api_reponse import api_response
 from sqlalchemy.exc import SQLAlchemyError
+from models.validation import RegistrationRequest
+
 
 user_routes = Blueprint('user_routes',__name__)
+
 
 @user_routes.route("/register", methods=['GET'])
 def user_register():
@@ -45,44 +48,41 @@ def user_login():
 
 @user_routes.route("/register", methods=['POST'])
 def do_registration():
+    registration_data = request.json
+    registration_request = RegistrationRequest(**registration_data)
 
-    name = request.json['name']
-    email = request.json['email']
-    password = request.json['password']
-
-    if not name or not email or not password:
-        return api_response(
-            status_code=400,
-            message="Incomplete data",
-            data={}
-        )
+    if not registration_request.name or not registration_request.email or not registration_request.password:
+        return jsonify({"message": "Incomplete data"}), 400
     
-    print(f"name: {name}, Email: {email}, Password Hash: {password}")
-    NewUser = User(name=name, email=email)
-    NewUser.set_password(password)
+    name = registration_request.name
+    email = registration_request.email
+    password = registration_request.password
 
-    connection = engine.connect()
-    Session = sessionmaker(connection)
-    session = Session()
-
-    session.begin()
     try:
+        NewUser = User(name=name, email=email)
+        NewUser.set_password(password)
+
+        connection = engine.connect()
+        Session = sessionmaker(connection)
+        session = Session()
+
+        session.begin()
         session.add(NewUser)
         session.commit()
-    except Exception as e:
-        print(f"Error during registration: {e}")
-        session.rollback()
-        return { "message": "Failed to Register" }
-    
-    return api_response(
-            status_code=201,
-            message= "New user data has been successfully added",
-            data={
+
+        return jsonify({
+            "message": "New user data has been successfully added",
+            "data": {
                 "id": NewUser.id,
                 "name": NewUser.name,
                 "email": NewUser.email
             }
-        )
+        }), 200
+    
+    except Exception as e:
+        print(f"Error during registration: {e}")
+        return jsonify({"message": "Failed to register"}), 500
+
 
 @user_routes.route("/login_user", methods=['POST'])
 def do_user_login():

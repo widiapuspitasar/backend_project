@@ -134,6 +134,7 @@ def create_about_company(company_id):
 
 @about_company_routes.route("/about_company_list", methods=['GET'])
 def get_about_company_list():
+    session = None 
     try:
         connection = engine.connect()
         Session = sessionmaker(connection)
@@ -165,6 +166,8 @@ def get_about_company_list():
 @login_required
 @about_company_routes.route("/about_company/edit/<int:company_id>", methods=['PUT'])
 def update_about_company(company_id):
+    session = None 
+    
     connection = engine.connect()
     Session = sessionmaker(connection)
     session = Session()
