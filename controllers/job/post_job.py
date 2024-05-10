@@ -142,6 +142,7 @@ def get_job_list_by_company_id(company_id):
                     "id": job.id,
                     "company_name": company.company_name,
                     "company_email": company.company_email,
+                    "company_id": company.id,
                     "job_name": job.job_name,
                     "job_description": job.job_description,
                     "post_until": job.post_until,
@@ -152,6 +153,7 @@ def get_job_list_by_company_id(company_id):
                     "job_category": job.job_category,
                     "vacancy": job.vacancy,
                     "educational_requirenment": job.educational_requirenment
+                    
                 })
 
             return api_response(
@@ -208,7 +210,8 @@ def get_job(post_job_id):
                     "job_level": post_job.job_level,
                     "job_category": post_job.job_category,
                     "vacancy": post_job.vacancy,
-                    "educational_requirenment": post_job.educational_requirenment
+                    "educational_requirenment": post_job.educational_requirenment,
+                    "company_id": post_job.company_id
                 }
 
                 return api_response(
