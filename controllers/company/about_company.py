@@ -42,6 +42,7 @@ def about_company(company_id):
                 "phonenumber": about_company.phonenumber,
                 "email": about_company.email,
                 "about_us": about_company.about_us,
+                "company_id":company.id
             })
 
         return api_response(
