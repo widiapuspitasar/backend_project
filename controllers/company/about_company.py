@@ -30,6 +30,7 @@ def about_company(company_id):
             "company_name": company.company_name,
             "company_email": company.company_email,
             "employer_name": company.employer_name,
+            "company_id": company.id
         }
 
         about_ucompany_data = []
@@ -58,7 +59,6 @@ def about_company(company_id):
             data={}
         )
     finally:
-        if session:
             session.close()
 
 @about_company_routes.route("/about_company/create/<int:company_id>", methods=['POST'])  
