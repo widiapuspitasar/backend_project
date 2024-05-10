@@ -4,7 +4,7 @@
 <h2 align="center">CAREERSEARCH</h2>
 
 <p align="center">
-<img src="\assets\image\CareerSearch_logo.png" width="200" height="200" />
+<img src="\assets\image\CareerSearch_logo.png" width="200" height="150" />
  
 <h4 align="center"> GROUP C</h4>
 
