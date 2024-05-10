@@ -96,6 +96,7 @@ def get_job_list():
                     "id": job.id,
                     "company_name": company.company_name,
                     "company_email": company.company_email,
+                    "company_id": company.id,
                     "job_name": job.job_name,
                     "job_description": job.job_description,
                     "post_until": job.post_until,

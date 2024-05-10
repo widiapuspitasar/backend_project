@@ -109,3 +109,18 @@ Set up a Railway project and link it to your repository.
 Configure the Railway deployment settings, including environment variables.
 Deploy the application to the Railway platform.
 
+### Contact
+You can contact our team via email:
+
+- **Widia Puspitasari** (Team Lead | Backend Engineer)  
+  Email: [puspitasariwidia@gmail.com](mailto:puspitasariwidia@gmail.com)
+
+- **Kevin Jeonghun** (Frontend Engineer)  
+  Email: [kevinjeonghun@gmail.com](mailto:kevinjeonghun@gmail.com)
+
+- **Muhammad Umar** (Frontend Engineer)  
+  Email: [umartsqb@gmail.com](mailto:umartsqb@gmail.com)
+
+- **Muhammad Aldiansyah** (Documentation)  
+  Email: [aldiansyahwork@gmail.com](mailto:aldiansyahwork@gmail.com)
+
